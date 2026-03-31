@@ -12,10 +12,15 @@ typedef struct struct_message {
   char message[32];
 } struct_message;
 
-struct_message myData;
+
+
+struct_message sendData;
+struct_message recData;
 
 // Peer info
 esp_now_peer_info_t peerInfo;
+
+
 
 // ✅ NEW SEND CALLBACK (UPDATED)
 void OnDataSent(const wifi_tx_info_t *info, esp_now_send_status_t status) {
@@ -25,11 +30,11 @@ void OnDataSent(const wifi_tx_info_t *info, esp_now_send_status_t status) {
 
 // ✅ NEW RECEIVE CALLBACK (UPDATED)
 void OnDataRecv(const esp_now_recv_info_t *info, const uint8_t *incomingData, int len) {
-  memcpy(&myData, incomingData, sizeof(myData));
+  memcpy(&recData, incomingData, sizeof(recData));
 
   Serial.println("=== RECEIVED ===");
   Serial.print("Text: ");
-  Serial.println(myData.message);
+  Serial.println(recData.message);
 
   delay(200);
   digitalWrite(2, HIGH);
@@ -38,8 +43,10 @@ void OnDataRecv(const esp_now_recv_info_t *info, const uint8_t *incomingData, in
 
   Serial.println();
 }
+
+
 Adafruit_SSD1306 display(128,64,&Wire,-1);
- 
+ ////////////////////////setup ////////////////////////
 void setup() {
 //Button
 pinMode(4,INPUT_PULLUP);
@@ -85,17 +92,18 @@ pinMode(4,INPUT_PULLUP);
 void loop() {
  if(digitalRead(4)==LOW){
 
-  display.println(myData.message);
+  display.println(recData.message);
   display.display();
   }
 
-  strcpy(myData.message, "no");
+  strcpy(sendData.message, "no");
 
   // Send data
-  esp_now_send(peerAddress, (uint8_t *) &myData, sizeof(myData));
+  esp_now_send(peerAddress, (uint8_t *) &sendData, sizeof(sendData));
 
   Serial.println("=== SENT ===");
 
-
+ display.clearDisplay();
   delay(2000);
+ 
 } 
