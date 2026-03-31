@@ -1,5 +1,8 @@
 #include <esp_now.h>
 #include <WiFi.h>
+#include <Wire.h>
+#include <Adafruit_GFX.h>
+#include <Adafruit_SSD1306.h>
 
 // Change THIS for each ESP (put the OTHER ESP MAC here)
 uint8_t peerAddress[] = {0xD4, 0x8C, 0x49, 0x56, 0xDE, 0xB4};
@@ -35,8 +38,24 @@ void OnDataRecv(const esp_now_recv_info_t *info, const uint8_t *incomingData, in
 
   Serial.println();
 }
+Adafruit_SSD1306 display(128,64,&Wire,-1);
+
 
 void setup() {
+//buttton
+
+
+
+//OLED Display 1306
+  Wire.begin(21,22);
+  display.begin(SSD1306_SWITCHCAPVCC,0x3C);
+  display.clearDisplay(); 
+  display.setTextSize(3);
+  display.setTextColor(SSD1306_WHITE);
+  display.setCursor(0,10);
+  display.println("Hello");
+  display.display();
+
   Serial.begin(115200);
   pinMode(2, OUTPUT);
 
@@ -63,7 +82,7 @@ void setup() {
 }
 
 void loop() {
-  strcpy(myData.message, "Hello from ESP");
+  strcpy(myData.message, "Hi");
 
   // Send data
   esp_now_send(peerAddress, (uint8_t *) &myData, sizeof(myData));
