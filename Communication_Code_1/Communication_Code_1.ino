@@ -13,14 +13,11 @@ typedef struct struct_message {
 } struct_message;
 
 
-
 struct_message sendData;
 struct_message recData;
 
 // Peer info
 esp_now_peer_info_t peerInfo;
-
-
 
 // ✅ NEW SEND CALLBACK (UPDATED)
 void OnDataSent(const wifi_tx_info_t *info, esp_now_send_status_t status) {
@@ -48,9 +45,16 @@ void OnDataRecv(const esp_now_recv_info_t *info, const uint8_t *incomingData, in
 Adafruit_SSD1306 display(128,64,&Wire,-1);
  ////////////////////////setup ////////////////////////
 void setup() {
+
+
+
 //Button
 pinMode(4,INPUT_PULLUP);
 
+//jump start the OLED
+digitalWrite(4,HIGH);
+delay(50);
+digitalWrite(4,LOW);
 
   //OLED SSD1306 setup
  
@@ -89,21 +93,32 @@ pinMode(4,INPUT_PULLUP);
   }
 }
 
-void loop() {
- if(digitalRead(4)==LOW){
+//define input for sent messages
+String input;
 
-  display.println(recData.message);
-  display.display();
+
+void loop() {
+  if(digitalRead(4)==LOW){
+  delay(100);
+  if(digitalRead(4)==LOW){
+    
+    //message input:
+  //if (Serial.available() > 0)
+Serial.println("Type your message and press ENTER:");
+ while (Serial.available() == 0); 
+ input = Serial.readStringUntil('\n');
+ input.toCharArray(sendData.message, 32);
+ esp_now_send(peerAddress, (uint8_t *) &sendData, sizeof(sendData));
+ Serial.println("=== SENT ===");
+      
+
+
+    }
   }
 
-  strcpy(sendData.message, "no");
-
-  // Send data
-  esp_now_send(peerAddress, (uint8_t *) &sendData, sizeof(sendData));
-
-  Serial.println("=== SENT ===");
-
- display.clearDisplay();
-  delay(2000);
- 
-} 
+   display.println(recData.message);
+  display.setCursor(10,0);
+  display.display();
+  delay(100);
+  display.clearDisplay();
+}

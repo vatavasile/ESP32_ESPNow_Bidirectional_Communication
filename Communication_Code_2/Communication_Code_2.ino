@@ -48,6 +48,7 @@ void OnDataRecv(const esp_now_recv_info_t *info, const uint8_t *incomingData, in
 Adafruit_SSD1306 display(128,64,&Wire,-1);
  ////////////////////////setup ////////////////////////
 void setup() {
+
 //Button
 pinMode(4,INPUT_PULLUP);
 
@@ -61,6 +62,10 @@ pinMode(4,INPUT_PULLUP);
   display.setTextColor(SSD1306_WHITE);
   display.setCursor(0,10);
  
+//jump start the OLED
+digitalWrite(4,HIGH);
+delay(50);
+digitalWrite(4,LOW);
 
 
 //ESP NOW setup 
@@ -89,21 +94,23 @@ pinMode(4,INPUT_PULLUP);
   }
 }
 
-void loop() {
- if(digitalRead(4)==LOW){
+String input;
+//////void loop//////
+void loop(){
+  if(digitalRead(4)==LOW){
+    delay(100);
+   if(digitalRead(4)==LOW){
 
-  display.println(recData.message);
-  display.display();
+  input = "Ciao!";
+ input.toCharArray(sendData.message, 32);
+ esp_now_send(peerAddress, (uint8_t *) &sendData, sizeof(sendData));
+ Serial.println("=== SENT ===");
   }
-
-  strcpy(sendData.message, "Ciao");
-
-  // Send data
-  esp_now_send(peerAddress, (uint8_t *) &sendData, sizeof(sendData));
-
-  Serial.println("=== SENT ===");
-
- display.clearDisplay();
-  delay(2000);
- 
+}
+  display.println(recData.message);
+  display.setCursor(0,10);
+  display.display();
+  delay(100);
+  display.clearDisplay();
 } 
+
