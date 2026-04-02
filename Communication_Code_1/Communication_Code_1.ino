@@ -104,10 +104,7 @@ void loop() {
   if(digitalRead(4)==LOW){
     
     //message input:
-  //if (Serial.available() > 0)
-Serial.println("Type your message and press ENTER:");
- while (Serial.available() == 0); 
- input = Serial.readStringUntil('\n');
+ input = "Hello!";
  input.toCharArray(sendData.message, 32);
  esp_now_send(peerAddress, (uint8_t *) &sendData, sizeof(sendData));
  Serial.println("=== SENT ===");
