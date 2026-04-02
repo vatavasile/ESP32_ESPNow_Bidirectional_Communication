@@ -3,7 +3,7 @@
 #include <Wire.h>
 #include <Adafruit_GFX.h>
 #include <Adafruit_SSD1306.h>
-
+#define BUZZER 16
 // Change THIS for each ESP (put the OTHER ESP MAC here)
 uint8_t peerAddress[] = {0x34, 0x94, 0x54, 0x30, 0xD9, 0xB4};
 
@@ -35,7 +35,9 @@ void OnDataRecv(const esp_now_recv_info_t *info, const uint8_t *incomingData, in
 
   delay(200);
   digitalWrite(2, HIGH);
+  digitalWrite(BUZZER, HIGH); 
   delay(200);
+  digitalWrite(BUZZER, LOW);  
   digitalWrite(2, LOW);
 
   Serial.println();
@@ -45,9 +47,8 @@ void OnDataRecv(const esp_now_recv_info_t *info, const uint8_t *incomingData, in
 Adafruit_SSD1306 display(128,64,&Wire,-1);
  ////////////////////////setup ////////////////////////
 void setup() {
-
-
-
+//buzzer setup
+pinMode(BUZZER,OUTPUT);
 //Button
 pinMode(4,INPUT_PULLUP);
 
