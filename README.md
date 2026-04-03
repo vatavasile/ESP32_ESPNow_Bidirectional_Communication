@@ -71,15 +71,14 @@ All communication events are handled using **ESP-NOW callbacks** for efficiency 
 - I2C communication (OLED display)  
 - Adafruit GFX & SSD1306 libraries  
 
----
-
+-- Prototype
 ## 📸 Preview
 
 ![Prototype](prototype_version_2.jpeg)
 
 ---
 
-## 🔧 Future Improvements (Contributions Welcome 🚀)
+## 🔧 Possible Future Improvements (Contributions are Welcome!)
 
 ### 🧑‍💻 Software
 - ⌨️ Dynamic message input (keyboard module / serial input)  
