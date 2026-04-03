@@ -128,8 +128,6 @@ All communication events are handled using **ESP-NOW callbacks** for efficiency 
 
 ## ⚡ Getting Started
 
-## ⚡ Getting Started
-
 1. Install Arduino IDE  
 2. Install required libraries:
    - Adafruit GFX  
