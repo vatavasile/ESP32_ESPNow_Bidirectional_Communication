@@ -346,6 +346,15 @@ void loop(){
 		display.println(sendData.message);
 
 		display.display();
+
+///morse code
+
+
+
+
+
+
+
 	}
 	digitalWrite(17,LOW);
 	}
