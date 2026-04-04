@@ -4,6 +4,7 @@
 #include <Adafruit_GFX.h>
 #include <Adafruit_SSD1306.h>
 #define BUZZER 16
+#include <Fonts/FreeSerif12pt7b.h>
 // Change THIS for each ESP (put the OTHER ESP MAC here)
 uint8_t peerAddress[] = {0x34, 0x94, 0x54, 0x30, 0xD9, 0xB4};
 
@@ -239,27 +240,56 @@ void setup() {
   display.clearDisplay(); 
 
   // Show startup first image
-  for(int i=0; i<3; i++){
+  	display.setTextColor(SSD1306_WHITE);
+  display.setFont(&FreeSerif12pt7b);
+for(int i=0; i<3; i++){
+
+  // Show startup first image
   display.clearDisplay();
   display.drawBitmap(0, 0, epd_bitmap_icon_first, 64, 64, WHITE);
+display.setCursor(70, 20);  
+ 	display.println("ESP");  
+	display.setCursor(85, 35); 
+	display.println("-");  
+	display.setCursor(64, 55); 
+	display.println("NOW");  
   display.display();
   delay(500);
   //Show startup second image
   display.clearDisplay();
   display.drawBitmap(0, 0, epd_bitmap_Icon_second, 64, 64, WHITE);
+display.setCursor(70, 20);  
+ 	display.println("ESP");  
+	display.setCursor(85, 35); 
+	display.println("-");  
+	display.setCursor(64, 55); 
+	display.println("NOW"); 
   display.display();
   delay(500);
   //Show startup second image
   display.clearDisplay();
   display.drawBitmap(0, 0, epd_bitmap_icon_third, 64, 64, WHITE);
+	display.setCursor(70, 20); 
+display.println("ESP");  
+	display.setCursor(85, 35); 
+	display.println("-");  
+	display.setCursor(64, 55); 
+	display.println("NOW");  
   display.display();
   delay(500);
   //Show startup third image
   display.clearDisplay();
   display.drawBitmap(0, 0, epd_bitmap_iconESP_NOW_Project, 64, 64, WHITE);
+	display.setCursor(70, 20);  
+ 	display.println("ESP");  
+	display.setCursor(85, 35); 
+	display.println("-");  
+	display.setCursor(64, 55); 
+	display.println("NOW");  
   display.display();
   delay(500);
 }
+display.setFont(); 
 
   WiFi.mode(WIFI_STA);
 
