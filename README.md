@@ -87,7 +87,7 @@ Each device is equipped with:
 
 ---
 
-## 📸 Startup Logo & Device Prototype
+## 📸 Startup Custom made Logo & Device Prototype
 
 <p align="center">
   <img src="Logo_Animation.gif" width="300"/>
