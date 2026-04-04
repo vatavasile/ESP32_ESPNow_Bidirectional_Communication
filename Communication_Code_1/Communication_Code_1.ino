@@ -226,11 +226,14 @@ void setup() {
 	//ESP NOW setup 
 	Serial.begin(115200);
 	pinMode(2, OUTPUT);	
+pinMode(17, OUTPUT);	
 	//buzzer setup
 	pinMode(BUZZER,OUTPUT);
 	//Button
 	pinMode(4,INPUT_PULLUP);
-
+	pinMode(25,INPUT_PULLUP);
+pinMode(35,INPUT_PULLUP);
+pinMode(15,INPUT_PULLUP);
   //OLED SSD1306 setup
  
   Wire.begin(21,22);
@@ -317,23 +320,53 @@ display.setFont();
 String input;
 
 
-void loop() {
+void loop(){
+	//write mode
+	input = "Hello!";
+
+	if((digitalRead(25)==LOW) && (digitalRead(35)== LOW)){
+		delay(50);
+		if((digitalRead(25)==LOW) && (digitalRead(35)== LOW)){
+			//blue LED hig 
+			digitalWrite(17,HIGH);
+			while(digitalRead(15)==HIGH){
+				//repeat the same UI
+		display.clearDisplay();
+
+		display.setCursor(0, 0);
+			display.setTextSize(2);
+		display.println("RECEIVED:");
+		display.setTextSize(1);
+		display.println(recData.message);
+
+		display.setCursor(0, 32);
+		display.setTextSize(2);
+		display.println("SENT:");
+		display.setTextSize(1);
+		display.println(sendData.message);
+
+		display.display();
+	}
+	digitalWrite(17,LOW);
+	}
+	}
+
+
+
+	//send the message
   if(digitalRead(4)==LOW){
   delay(300);
   if(digitalRead(4)==LOW){
     
-    //message input:
- input = "Hello!";
- input.toCharArray(sendData.message, 32);
- esp_now_send(peerAddress, (uint8_t *) &sendData, sizeof(sendData));
- Serial.println("=== SENT ===");
-      
-
-
+  //message input:
+ 
+ 	input.toCharArray(sendData.message, 32);
+ 	esp_now_send(peerAddress, (uint8_t *) &sendData, sizeof(sendData));
+ 	Serial.println("=== SENT ===");
     }
   }
 
-  display.clearDisplay();
+display.clearDisplay();
 
 display.setCursor(0, 0);
 display.setTextSize(2);

@@ -227,6 +227,9 @@ void setup() {
 ledcAttach(BUZZER,2000,8);
 //Button
 pinMode(4,INPUT_PULLUP);
+pinMode(35,INPUT_PULLUP);
+pinMode(32,INPUT_PULLUP);
+pinMode(33,INPUT_PULLUP);
 
 //OLED SSD1306 setup
  
@@ -293,7 +296,7 @@ display.setFont();
 //ESP NOW setup 
   Serial.begin(115200);
   pinMode(2, OUTPUT);
-
+	pinMode(17, OUTPUT);
   WiFi.mode(WIFI_STA);
 
   if (esp_now_init() != ESP_OK) {
@@ -319,11 +322,45 @@ display.setFont();
 String input;
 //////void loop//////
 void loop(){
+
+//write mode
+	input = "MIAO!";
+
+	if((digitalRead(35)==LOW) && (digitalRead(33)== LOW)){
+		delay(50);
+		if((digitalRead(35)==LOW) && (digitalRead(33)== LOW)){
+			//blue LED hig 
+			digitalWrite(17,HIGH);
+			while(digitalRead(32)==HIGH){
+				//repeat the same UI
+		display.clearDisplay();
+
+		display.setCursor(0, 0);
+			display.setTextSize(2);
+		display.println("RECEIVED:");
+		display.setTextSize(1);
+		display.println(recData.message);
+
+		display.setCursor(0, 32);
+		display.setTextSize(2);
+		display.println("SENT:");
+		display.setTextSize(1);
+		display.println(sendData.message);
+
+		display.display();
+	}
+	digitalWrite(17,LOW);
+	}
+	}
+
+
+
+
   if(digitalRead(4)==LOW){
     delay(300);
    if(digitalRead(4)==LOW){
 
-  input = "Ciao!";
+  
  input.toCharArray(sendData.message, 32);
  esp_now_send(peerAddress, (uint8_t *) &sendData, sizeof(sendData));
  Serial.println("=== SENT ===");
