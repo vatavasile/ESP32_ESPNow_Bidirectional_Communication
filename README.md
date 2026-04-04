@@ -71,11 +71,12 @@ All communication events are handled using **ESP-NOW callbacks** for efficiency 
 - I2C communication (OLED display)  
 - Adafruit GFX & SSD1306 libraries  
 
--- Prototype
-## 📸 Preview
+
+## 📸 Startup Logo & Device Prototype
+
+![Prototype Animation](Logo_Animation.gif)
 
 ![Prototype](prototype_version_2.jpeg)
-
 ---
 
 ## 🔧 Possible Future Improvements (Contributions are Welcome!)
