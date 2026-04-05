@@ -179,6 +179,36 @@ const unsigned char epd_bitmap_iconESP_NOW_Project [] PROGMEM = {
 
 //////////////////////////////////////////
 
+// ===== MORSE SYSTEM =====
+
+String currentMorse = "";
+String morseMessage = "";
+
+struct MorseMap {
+  const char* code;
+  char letter;
+};
+
+MorseMap morseTable[] = {
+  {".-", 'A'}, {"-...", 'B'}, {"-.-.", 'C'}, {"-..", 'D'},
+  {".", 'E'}, {"..-.", 'F'}, {"--.", 'G'}, {"....", 'H'},
+  {"..", 'I'}, {".---", 'J'}, {"-.-", 'K'}, {".-..", 'L'},
+  {"--", 'M'}, {"-.", 'N'}, {"---", 'O'}, {".--.", 'P'},
+  {"--.-", 'Q'}, {".-.", 'R'}, {"...", 'S'}, {"-", 'T'},
+  {"..-", 'U'}, {"...-", 'V'}, {".--", 'W'}, {"-..-", 'X'},
+  {"-.--", 'Y'}, {"--..", 'Z'}
+};
+
+char decodeMorse(String code) {
+  for (int i = 0; i < sizeof(morseTable)/sizeof(morseTable[0]); i++) {
+    if (code == morseTable[i].code) {
+      return morseTable[i].letter;
+    }
+  }
+  return '?';
+}
+
+
 
 // Data structure (MUST be identical on both)
 typedef struct struct_message {
@@ -227,9 +257,9 @@ void setup() {
 ledcAttach(BUZZER,2000,8);
 //Button
 pinMode(4,INPUT_PULLUP);
-pinMode(35,INPUT_PULLUP);
+pinMode(14,INPUT_PULLUP);
 pinMode(32,INPUT_PULLUP);
-pinMode(33,INPUT_PULLUP);
+pinMode(26,INPUT_PULLUP);
 
 //OLED SSD1306 setup
  
@@ -319,54 +349,94 @@ display.setFont();
   }
 }
 
-String input;
+
 //////void loop//////
 void loop(){
 
 //write mode
-	input = "MIAO!";
+	if((digitalRead(26)==LOW) && (digitalRead(14)== LOW)){
+		delay(200);
+		if((digitalRead(26)==LOW) && (digitalRead(14)== LOW)){
+			 morseMessage = "";
+      currentMorse = "";
+        sendData.message[0] = '\0';  // clear buffer
 
-	if((digitalRead(35)==LOW) && (digitalRead(33)== LOW)){
-		delay(50);
-		if((digitalRead(35)==LOW) && (digitalRead(33)== LOW)){
 			//blue LED hig 
 			digitalWrite(17,HIGH);
 			while(digitalRead(32)==HIGH){
-				//repeat the same UI
-		display.clearDisplay();
 
-		display.setCursor(0, 0);
-			display.setTextSize(2);
-		display.println("RECEIVED:");
-		display.setTextSize(1);
-		display.println(recData.message);
+// Dot (button 35)
+if (digitalRead(26) == LOW) {
+  delay(170);
+  if (digitalRead(26) == LOW) {
+    currentMorse += ".";
+  }
+}
 
-		display.setCursor(0, 32);
-		display.setTextSize(2);
-		display.println("SENT:");
-		display.setTextSize(1);
-		display.println(sendData.message);
+// Dash (button 25)
+if (digitalRead(14) == LOW) {
+  delay(170);
+  if (digitalRead(14) == LOW) {
+    currentMorse += "-";
+  }
+}
 
-		display.display();
+// Decode (button 4)
+if (digitalRead(4) == LOW) {
+  delay(170);
+  if (digitalRead(4) == LOW) {
+
+    char letter = decodeMorse(currentMorse);
+    morseMessage += letter;
+
+    // Save to sendData (what will be sent)
+    morseMessage.toCharArray(sendData.message, 32);
+
+    currentMorse = ""; // reset for next letter
+  }
+}
+
+
+display.clearDisplay();
+
+// Received
+display.setCursor(0, 0);
+display.setTextSize(2);
+display.println("RECEIVED:");
+display.setTextSize(1);
+display.println(recData.message);
+
+// Sent
+display.setCursor(0, 32);
+display.setTextSize(2);
+display.println("SENT:");
+display.setTextSize(1);
+display.println(morseMessage);
+
+// Morse (small, right side)
+display.setCursor(80, 32);
+display.setTextSize(1);
+display.println(currentMorse);
+
+display.display();
 	}
 	digitalWrite(17,LOW);
 	}
 	}
 
-
-
-
   if(digitalRead(4)==LOW){
-    delay(300);
+    delay(200);
    if(digitalRead(4)==LOW){
 
   
- input.toCharArray(sendData.message, 32);
+ //input.toCharArray(sendData.message, 32);
  esp_now_send(peerAddress, (uint8_t *) &sendData, sizeof(sendData));
  Serial.println("=== SENT ===");
   }
 }
-  display.clearDisplay();
+
+//usual display, end of write mode
+display.clearDisplay();
 
 display.setCursor(0, 0);
 display.setTextSize(2);
