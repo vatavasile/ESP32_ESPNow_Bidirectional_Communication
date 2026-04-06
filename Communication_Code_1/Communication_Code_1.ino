@@ -348,9 +348,9 @@ display.setFont();
 
 void loop(){
 
-	if((digitalRead(35)==LOW) && (digitalRead(25)== LOW)){
+	if((digitalRead(25)==LOW) && (digitalRead(35)== LOW)){
 		delay(50);
-		if((digitalRead(35)==LOW) && (digitalRead(25)== LOW)){
+		if((digitalRead(25)==LOW) && (digitalRead(35)== LOW)){
 			 morseMessage = "";
       currentMorse = "";
         sendData.message[0] = '\0';  // clear buffer
@@ -361,17 +361,17 @@ void loop(){
 			while(digitalRead(15)==HIGH){
 
 				// Dot (button 14)
-if (digitalRead(35) == LOW) {
+if (digitalRead(25) == LOW) {
   delay(170);
-  if (digitalRead(35) == LOW) {
+  if (digitalRead(25) == LOW) {
     currentMorse += ".";
   }
 }
 
 // Dash (button 12)
-if (digitalRead(25) == LOW) {
+if (digitalRead(35) == LOW) {
   delay(170);
-  if (digitalRead(25) == LOW) {
+  if (digitalRead(35) == LOW) {
     currentMorse += "-";
   }
 }
