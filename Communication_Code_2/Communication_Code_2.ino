@@ -240,11 +240,11 @@ void OnDataRecv(const esp_now_recv_info_t *info, const uint8_t *incomingData, in
   Serial.println(recData.message);
 
   delay(200);
-  digitalWrite(2, HIGH);
+  digitalWrite(18, HIGH);
   ledcWriteTone(BUZZER,2000);
   delay(200);
   ledcWriteTone(BUZZER,0);
-  digitalWrite(2,LOW);
+  digitalWrite(18,LOW);
 
   Serial.println();
 }
@@ -257,7 +257,7 @@ void setup() {
 ledcAttach(BUZZER,2000,8);
 //Button
 pinMode(4,INPUT_PULLUP);
-pinMode(14,INPUT_PULLUP);
+pinMode(5,INPUT_PULLUP);
 pinMode(32,INPUT_PULLUP);
 pinMode(26,INPUT_PULLUP);
 
@@ -325,7 +325,7 @@ display.println("ESP");
 display.setFont(); 
 //ESP NOW setup 
   Serial.begin(115200);
-  pinMode(2, OUTPUT);
+  pinMode(18, OUTPUT);
 	pinMode(17, OUTPUT);
   WiFi.mode(WIFI_STA);
 
@@ -354,9 +354,9 @@ display.setFont();
 void loop(){
 
 //write mode
-	if((digitalRead(26)==LOW) && (digitalRead(14)== LOW)){
+	if((digitalRead(26)==LOW) && (digitalRead(5)== LOW)){
 		delay(200);
-		if((digitalRead(26)==LOW) && (digitalRead(14)== LOW)){
+		if((digitalRead(26)==LOW) && (digitalRead(5)== LOW)){
 			 morseMessage = "";
       currentMorse = "";
         sendData.message[0] = '\0';  // clear buffer
@@ -374,9 +374,9 @@ if (digitalRead(26) == LOW) {
 }
 
 // Dash (button 25)
-if (digitalRead(14) == LOW) {
+if (digitalRead(5) == LOW) {
   delay(170);
-  if (digitalRead(14) == LOW) {
+  if (digitalRead(5) == LOW) {
     currentMorse += "-";
   }
 }
